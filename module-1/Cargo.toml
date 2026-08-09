@@ -1,0 +1,13 @@
+[package]
+name = "async-rust-fundamentals"
+description = """
+The foundation of async programming in rust,
+including async/await model primitives, tokio runtime,
+the task lifecycle within and the capstone project,
+which implements a async telemetry broker.
+"""
+version.workspace = true
+edition.workspace = true
+homepage = "https://rustycloud.org/foundation_track/module-01-async-rust-fundamentals/index.html"
+
+[dependencies]

@@ -1,0 +1,14 @@
+[workspace]
+resolver = "3"
+
+members = ["module-1"]
+
+[workspace.package]
+name = "meridian-space"
+description = "The Meridian Space Academy course."
+version = "0.1.0"
+edition = "2024"
+homepage = "https://rustycloud.org/index.html"
+
+[workspace.dependencies]
+tokio = "1"
