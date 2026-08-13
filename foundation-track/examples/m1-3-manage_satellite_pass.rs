@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use module_1::pass_session::manage_pass;
+use foundation_track::module1::pass_session::manage_pass;
 use tokio::sync::oneshot;
 
 #[tokio::main]

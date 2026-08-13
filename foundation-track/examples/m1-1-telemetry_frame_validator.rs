@@ -1,4 +1,4 @@
-use module_1::frame_validation::FrameValidationFuture;
+use foundation_track::module1::frame_validation::FrameValidationFuture;
 use tokio::sync::oneshot;
 
 #[tokio::main]
