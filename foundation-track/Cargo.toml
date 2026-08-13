@@ -1,0 +1,59 @@
+[package]
+name = "foundation-track"
+description = """
+The foundation of async programming in rust,
+including 4 modules which span from fundamentals, concurrency primitives,
+message passing patterns, network programming, data-oriented programming
+to performace & profiling.
+"""
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+num_cpus.workspace = true
+tokio = { workspace = true, features = ["full"] }
+tokio-util = { workspace = true, features = ["rt"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[[examples]]
+name = "tokio-pin"
+path = "examples/m1.1-tokio_pin.rs"
+
+[[examples]]
+name = "telemetry-frame-validator"
+path = "examples/m1.1-telemetry_frame_validator.rs"
+
+[[examples]]
+name = "tokio-join"
+path = "examples/m1.1-tokio_join.rs"
+
+[[examples]]
+name = "runtime-builder"
+path = "examples/m1.2-runtime_builder.rs"
+
+[[examples]]
+name = "isolated-runtimes"
+path = "examples/m1.2-isolated_runtimes.rs"
+
+[[examples]]
+name = "dispatch-blocking-work"
+path = "examples/m1.2-dispatch_blocking_work.rs"
+
+[[examples]]
+name = "cancellation-token"
+path = "examples/m1.3-cancellation_token.rs"
+
+[[examples]]
+name = "task-tracker"
+path = "examples/m1.3-task_tracker.rs"
+
+[[examples]]
+name = "tokio-select"
+path = "examples/m1.3-tokio_select.rs"
+
+[[examples]]
+name = "manage-satellite-pass"
+path = "examples/m1.3-manage_satellite_pass.rs"
