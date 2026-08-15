@@ -65,3 +65,19 @@ path = "examples/m2-1-thread_scope.rs"
 [[examples]]
 name = "async-and-blocking"
 path = "examples/m2-1-async_and_blocking.rs"
+
+[[examples]]
+name = "parallel-conjunction-screening"
+path = "examples/m2-1-parallel_conjunction_screening.rs"
+
+[[examples]]
+name = "exclusive-access"
+path = "examples/m2-2-exclusive_access.rs"
+
+[[examples]]
+name = "priority-command-queue"
+path = "examples/m2-2-priority_command_queue.rs"
+
+[[examples]]
+name = "atomic-frame-counter"
+path = "examples/m2-2-atomic_frame_counter.rs"
