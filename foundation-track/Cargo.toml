@@ -80,4 +80,16 @@ path = "examples/m2-2-priority_command_queue.rs"
 
 [[examples]]
 name = "atomic-frame-counter"
-path = "examples/m2-2-atomic_frame_counter.rs"
+path = "examples/m2-3-atomic_frame_counter.rs"
+
+[[examples]]
+name = "tokio-mpsc"
+path = "examples/m3-1-tokio_mpsc.rs"
+
+[[examples]]
+name = "tokio-oneshot"
+path = "examples/m3-1-tokio_oneshot.rs"
+
+[[examples]]
+name = "frame-aggregator-actor"
+path = "examples/m3-1-frame_aggregator_actor.rs"
