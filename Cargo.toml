@@ -12,6 +12,7 @@ homepage = "https://rustycloud.org/index.html"
 
 [workspace.dependencies]
 anyhow = "1"
+bytes = "1"
 num_cpus = "1"
 tokio = "1"
 tokio-util = "0.7"

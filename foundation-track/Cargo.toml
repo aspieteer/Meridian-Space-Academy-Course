@@ -12,6 +12,7 @@ homepage.workspace = true
 
 [dependencies]
 anyhow.workspace = true
+bytes.workspace = true
 num_cpus.workspace = true
 tokio = { workspace = true, features = ["full"] }
 tokio-util = { workspace = true, features = ["rt"] }
@@ -93,3 +94,11 @@ path = "examples/m3-1-tokio_oneshot.rs"
 [[examples]]
 name = "frame-aggregator-actor"
 path = "examples/m3-1-frame_aggregator_actor.rs"
+
+[[examples]]
+name = "broadcast-and-watch-channel"
+path = "examples/m3-2-broadcast_and_watch_channel.rs"
+
+[[examples]]
+name = "catalog-update-broadcaster"
+path = "examples/m3-2-catalog_update_broadcaster.rs"
