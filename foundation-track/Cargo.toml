@@ -102,3 +102,7 @@ path = "examples/m3-2-broadcast_and_watch_channel.rs"
 [[examples]]
 name = "catalog-update-broadcaster"
 path = "examples/m3-2-catalog_update_broadcaster.rs"
+
+[[examples]]
+name = "fan-in-patterns"
+path = "examples/m3-3-fan_in_patterns.rs"
