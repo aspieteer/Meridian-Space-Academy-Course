@@ -133,6 +133,20 @@ impl TelemetrySystem {
         }
 
         let (feed_tx, feed_rx) = mpsc::channel(16);
+
+        let source_msg = SourceMsg::AddSource {
+            source_id,
+            source_kind: source_kind.clone(),
+            feed: feed_rx,
+        };
+
+        // Immediately send the Message by ctrl_tx,
+        // if error, no further adding the entry to the system.
+        if ctrl_tx.try_send(source_msg).is_err() {
+            tracing::warn!("Adding SourceMessage failed, the prompting Source discarded.");
+            return None;
+        }
+
         let source = Source::new(source_id, source_kind.clone(), feed_tx);
 
         match source_kind {
@@ -147,20 +161,46 @@ impl TelemetrySystem {
             }
         }
 
-        drop(state);
+        tracing::info!(source = ?source.source(), "adding source");
+        Some(source)
+    }
 
-        let source_msg = SourceMsg::AddSource {
-            source_id,
-            source_kind,
-            feed: feed_rx,
+    pub fn remove_source(
+        &self,
+        source_id: u32,
+        source_kind: SourceKind,
+        ctrl_tx: mpsc::Sender<SourceMsg>,
+    ) {
+        let mut state = self.shared.state.lock().unwrap();
+
+        let source = match source_kind {
+            SourceKind::LiveUplink => state.sources_uplink.remove(&source_id),
+            SourceKind::ArchivedReplay => state.sources_archiv_replay.remove(&source_id),
         };
 
-        // TODO:
-        if ctrl_tx.try_send(source_msg).is_err() {
-            return None;
+        if let Some(source) = source {
+            let source_msg = SourceMsg::RemoveSource {
+                source_id,
+                source_kind,
+            };
+
+            if ctrl_tx.try_send(source_msg).is_err() {
+                tracing::warn!("ctrl receiver has shut down");
+            }
+
+            tracing::info!(source = ?source.source(), "removing source");
+        }
+    }
+
+    pub fn shutdown_all_sources_feeds(&self) {
+        let mut state = self.shared.state.lock().unwrap();
+
+        for (_, mut s) in state.sources_uplink.drain() {
+            s.take_feed();
         }
 
-        tracing::info!(source = ?source.source(), "Adding source");
-        Some(source)
+        for (_, mut s) in state.sources_archiv_replay.drain() {
+            s.take_feed();
+        }
     }
 }

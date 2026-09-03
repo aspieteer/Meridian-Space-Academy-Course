@@ -12,7 +12,7 @@ use super::frame::Frame;
 pub struct Source {
     source_id: u32,
     source_kind: SourceKind,
-    feed: mpsc::Sender<Frame>,
+    feed: Option<mpsc::Sender<Frame>>,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -30,7 +30,7 @@ impl Source {
         Self {
             source_id,
             source_kind,
-            feed: feed_tx,
+            feed: Some(feed_tx),
         }
     }
 
@@ -38,12 +38,21 @@ impl Source {
         (self.source_id, &self.source_kind)
     }
 
+    pub(crate) fn take_feed(&mut self) -> Option<mpsc::Sender<Frame>> {
+        self.feed.take()
+    }
+
     pub async fn feeding(&self, priority: FramePriority, payload: Bytes) {
         // TODO: Further sequence hashing actually needs each source
         // holds its own hasher, to be honest.
         let frame = Frame::new(self.source_id, self.source_kind.clone(), priority, payload);
 
-        let _ = self.feed.send(frame).await;
+        let _ = self
+            .feed
+            .as_ref()
+            .expect("Invalid Source without feed channel")
+            .send(frame)
+            .await;
     }
 }
 

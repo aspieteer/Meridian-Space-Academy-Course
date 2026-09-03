@@ -18,11 +18,17 @@ use std::{
     },
 };
 
-use tokio::sync::{broadcast, mpsc, watch};
+use bytes::Bytes;
+use rand::{Rng, RngExt, SeedableRng, rngs::SmallRng};
+use tokio::{
+    sync::{broadcast, mpsc, watch},
+    time::Duration,
+};
 
 use super::{
     frame::{Frame, FramePriority},
-    source::SourceMsg,
+    source::{SourceKind, SourceMsg},
+    telemetry_system::TelemetrySystem,
 };
 
 #[derive(Debug)]
@@ -51,6 +57,33 @@ impl PipelineStats {
     }
     pub fn emergency_count(&self) -> u64 {
         self.emergency_count.load(Ordering::Relaxed)
+    }
+}
+
+pub async fn adding_source(system: Arc<TelemetrySystem>, ctrl_tx: mpsc::Sender<SourceMsg>) {
+    let mut rng = SmallRng::from_rng(&mut rand::rng());
+    loop {
+        let ctrl_tx_clone = ctrl_tx.clone();
+        let idx = rng.random_range(0..100) as u32;
+        let dice = rng.random_range(0..100);
+        // SAFETY: We assure that the interval is a positive integer.
+        // TODO: Can further tweak the parameter for more frequent source adding request.
+        let interval = i64::from(rng.random_range(100..200));
+        let kind = match dice {
+            0..96 => SourceKind::LiveUplink,
+            96..100 => SourceKind::ArchivedReplay,
+            _ => unreachable!(),
+        };
+        tokio::time::sleep(Duration::from_millis(interval as u64)).await;
+
+        let source = system.add_source(idx, kind, ctrl_tx_clone);
+        if let Some(source) = source {
+            let mut data = [0u8; 10];
+            rand::rng().fill_bytes(&mut data);
+            source
+                .feeding(FramePriority::Routine, Bytes::from(data.to_vec()))
+                .await;
+        }
     }
 }
 
@@ -114,12 +147,14 @@ pub async fn router_source(
             Ok(()) = shutdown_rx.changed() => {
                 if *shutdown_rx.borrow() {
                     drop(internal_tx);
-                    for (_, h) in feed_handles.drain() { h.await.unwrap(); }
                     break;
                 }
             }
             else => break,
         }
+    }
+    for (_, h) in feed_handles.drain() {
+        h.await.unwrap();
     }
 }
 
