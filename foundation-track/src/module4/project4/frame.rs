@@ -1,7 +1,7 @@
 use rand::{Rng, RngExt, SeedableRng, rngs::SmallRng};
 use tokio::{io::AsyncReadExt, net::TcpStream};
 
-use crate::module4::project4::gs_client::TleRecord;
+use super::tle_record::TleRecord;
 
 #[derive(Debug)]
 pub struct Frame {

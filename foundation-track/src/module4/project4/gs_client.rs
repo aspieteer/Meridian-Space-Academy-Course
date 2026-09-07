@@ -1,14 +1,13 @@
 use std::time::{Duration, Instant};
 
 use reqwest::Client;
-use serde::Deserialize;
 use tokio::{
     io::AsyncWriteExt,
     net::TcpStream,
     sync::{mpsc, watch},
 };
 
-use super::frame::Frame;
+use super::{frame::Frame, tle_record::TleRecord};
 
 pub struct ClientGuard {
     gs_client: GroundStationClient,
@@ -44,14 +43,6 @@ pub struct ClientConfig {
     norad_id: u32,
     api_base_url: String,
     tle_refresh_interval: Duration,
-}
-
-#[derive(Clone, Debug, Deserialize)]
-pub struct TleRecord {
-    norad_id: u32,
-    name: String,
-    line1: String,
-    line2: String,
 }
 
 // ===== impl ClientGuard =====
