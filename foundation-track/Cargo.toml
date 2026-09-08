@@ -19,6 +19,7 @@ hyper-util.workspace = true
 num_cpus.workspace = true
 pin-project-lite.workspace = true
 rand.workspace = true
+rayon.workspace = true
 reqwest = { workspace = true, features = ["json", "query"] }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true, features = ["full"] }
