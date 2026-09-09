@@ -1,5 +1,6 @@
 use std::{net::SocketAddr, time::Duration};
 
+use anyhow::Context;
 use bytes::{Buf, Bytes, BytesMut};
 use http_body_util::Full;
 use hyper::{StatusCode, service::service_fn};
@@ -10,7 +11,7 @@ use tokio::{
     sync::watch,
 };
 
-use crate::module4::project4::frame::Frame;
+use crate::module4::project4::frame;
 
 pub async fn tcp_task(
     tcp_listener: TcpListener,
@@ -101,7 +102,7 @@ async fn run_connection(
                 }
             }
             _ = ticker.tick() => {
-                let frame = Frame::create_frame();
+                let frame = frame::create_frame();
                 tracing::debug!(%addr, bytes = frame.as_slice().len(), "tcp_task: writing frame");
                 if let Err(e) = stream.write_all(frame.as_slice()).await {
                     tracing::warn!(%addr, "tcp_task: write failed ({e}), closing connection");
@@ -112,6 +113,7 @@ async fn run_connection(
                 // A dropped sender counts as shutdown too.
                 if shutdown.is_err() || *shutdown_rx.borrow() {
                     tracing::info!(%addr, "tcp_task: shutdown signal received in connection task");
+                    let _ = frame::write_frame(&mut stream, b"server shut down").await.context("failed to write shut down message");
                     break;
                 }
             }

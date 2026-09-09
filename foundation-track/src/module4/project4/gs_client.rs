@@ -1,5 +1,6 @@
 use std::time::{Duration, Instant};
 
+use anyhow::Context;
 use reqwest::Client;
 use tokio::{
     io::AsyncWriteExt,
@@ -7,7 +8,10 @@ use tokio::{
     sync::{mpsc, watch},
 };
 
-use super::{frame::Frame, tle_record::TleRecord};
+use super::{
+    frame::{self, Frame},
+    tle_record::TleRecord,
+};
 
 pub struct ClientGuard {
     gs_client: GroundStationClient,
@@ -140,7 +144,7 @@ impl GroundStationClient {
         loop {
             tokio::select! {
                 biased;
-                frame = tokio::time::timeout(Duration::from_secs(60), Frame::read_frame(&mut stream)) => {
+                frame = tokio::time::timeout(Duration::from_secs(60), frame::read_frame(&mut stream)) => {
                     match frame {
                         Err(_) => {
                             tracing::warn!(station = %self.inner.config.station_id, "session timeout");
@@ -169,10 +173,7 @@ impl GroundStationClient {
                     if *shutdown_rx.borrow() {
                         tracing::info!(station = %self.inner.config.station_id, "shutdown — sending GOODBYE");
                         let payload = b"GOODBYE";
-                        let len = (payload.len() as u32).to_be_bytes();
-                        let _ = stream.write_all(&len).await;
-                        let _ = stream.write_all(payload).await;
-                        let _ = stream.flush().await;
+                        let _ = frame::write_frame(&mut stream, payload).await.context("failed to write goodbye message");
                         let _ = stream.shutdown().await;
                         break;
                     }
