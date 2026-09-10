@@ -25,7 +25,7 @@ async fn main() {
         TLE_REFRESH_INTERVAL_SECS,
     );
 
-    let gs_client = ClientGuard::new(
+    let mut gs_client = ClientGuard::new(
         &config,
         overall_timeout_secs,
         conn_timeout_secs,
