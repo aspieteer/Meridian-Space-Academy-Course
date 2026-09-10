@@ -87,7 +87,7 @@ impl ClientGuard {
         }
     }
 
-    pub async fn run(&self, shutdown_rx: watch::Receiver<bool>) {
+    pub async fn run(&mut self, shutdown_rx: watch::Receiver<bool>) {
         let (frame_tx, frame_rx) = mpsc::channel(256);
 
         tokio::spawn(frame_receiver(frame_rx));
@@ -188,7 +188,7 @@ impl GroundStationClient {
     }
 
     async fn run_client(
-        &self,
+        &mut self,
         tle_tx: &watch::Sender<Option<TleRecord>>,
         frame_tx: &mpsc::Sender<Frame>,
         shutdown_rx: watch::Receiver<bool>,
@@ -221,6 +221,8 @@ impl GroundStationClient {
                     // Run session
                     self.run_session(stream, tle_tx, frame_tx, shutdown_rx.clone())
                         .await;
+                    // Go into a new connection loop once run_session completed for whatever reason.
+                    self.start_at = Instant::now();
                     // After one session, check the shutdown signal to be able to early exit.
                     if *shutdown_rx.borrow() {
                         break;
