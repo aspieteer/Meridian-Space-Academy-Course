@@ -12,6 +12,7 @@ homepage.workspace = true
 
 [dependencies]
 anyhow.workspace = true
+bumpalo.workspace = true
 bytes.workspace = true
 http-body-util.workspace = true
 hyper = { workspace = true, features = ["server"] }
@@ -26,6 +27,9 @@ tokio = { workspace = true, features = ["full"] }
 tokio-util = { workspace = true, features = ["rt"] }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+criterion.workspace = true
 
 [[examples]]
 name = "tokio-pin"
@@ -118,3 +122,11 @@ path = "examples/m3-3-fan_in_patterns.rs"
 [[examples]]
 name = "tcp-server"
 path = "examples/m4-1-tcp_server.rs"
+
+[[bench]]
+name = "frame_batch"
+harness = false
+
+[[bench]]
+name = "bench_allocs"
+harness = false
