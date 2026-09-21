@@ -14,9 +14,11 @@ homepage.workspace = true
 anyhow.workspace = true
 bumpalo.workspace = true
 bytes.workspace = true
+fastrand.workspace = true
 http-body-util.workspace = true
 hyper = { workspace = true, features = ["server"] }
 hyper-util.workspace = true
+jiff.workspace = true
 num_cpus.workspace = true
 pin-project-lite.workspace = true
 rand.workspace = true
