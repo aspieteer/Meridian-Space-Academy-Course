@@ -3,6 +3,19 @@ use std::{
     time::{Duration, Instant},
 };
 
+pub fn build_test_data(n: usize) -> (Vec<u64>, Vec<(u64, u32)>) {
+    let headers: Vec<(u64, u32)> = (0..n).map(|i| ((i / 3) as u64, (i % 48) as u32)).collect();
+    let timestamps: Vec<u64> = (0..n).map(|i| (n - i) as u64).collect();
+
+    (timestamps, headers)
+}
+
+pub fn process_batch(headers: &[(u64, u32)], timestamps: &[u64]) -> usize {
+    let mut indices = deduplicate(headers);
+    sort_by_timestamp(&mut indices, timestamps);
+    indices.len()
+}
+
 pub fn processing(headers: &[(u64, u32)], timestamps: &[u64], iters: u32) -> (Duration, Duration) {
     let dedup_time = time_fn(
         || {
@@ -23,6 +36,7 @@ pub fn processing(headers: &[(u64, u32)], timestamps: &[u64], iters: u32) -> (Du
     (dedup_time, sort_time)
 }
 
+#[inline(never)]
 fn deduplicate(headers: &[(u64, u32)]) -> Vec<usize> {
     let mut seen = std::collections::HashSet::with_capacity(headers.len());
 
@@ -36,6 +50,7 @@ fn deduplicate(headers: &[(u64, u32)]) -> Vec<usize> {
         .collect()
 }
 
+#[inline(never)]
 fn sort_by_timestamp(indices: &mut [usize], timestamps: &[u64]) {
     indices.sort_unstable_by_key(|&i| timestamps[i]);
 }

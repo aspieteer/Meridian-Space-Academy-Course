@@ -1,4 +1,4 @@
-use foundation_track::module6::benchmarking::processing;
+use foundation_track::module6::benchmarking::{build_test_data, processing};
 
 fn main() {
     println!(
@@ -9,8 +9,7 @@ fn main() {
 
     for &n in &[100_usize, 500, 1_000, 5_000, 10_000] {
         // Build test data once — not in the measured loop.
-        let headers: Vec<(u64, u32)> = (0..n).map(|i| ((i / 3) as u64, (i % 48) as u32)).collect();
-        let timestamps: Vec<u64> = (0..n).map(|i| (n - i) as u64).collect();
+        let (timestamps, headers) = build_test_data(n);
 
         let (dedup_time, sort_time) = processing(&headers, &timestamps, 10_000);
 

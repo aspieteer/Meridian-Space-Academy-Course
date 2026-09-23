@@ -33,6 +33,10 @@ tracing-subscriber = { workspace = true }
 [dev-dependencies]
 criterion.workspace = true
 
+[profile.release]
+debug = true # Include debug symbols (DWARF info).
+
+
 # ===== examples =====
 
 [[examples]]

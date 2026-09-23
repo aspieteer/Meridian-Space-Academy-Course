@@ -16,9 +16,4 @@ fn main() {
     // Reset — all allocations invalidated, slab reused.
     arena.reset();
     println!("after reset: used {}", arena.used());
-
-    use core::alloc::Layout;
-
-    let a = Layout::from_size_align(1, 3).unwrap_err();
-    println!("{}", a);
 }
