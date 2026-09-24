@@ -1,5 +1,5 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use foundation_track::module6::benchmarking::processing;
+use foundation_track::module6::part1::benchmarking::processing;
 
 fn bench_processing(c: &mut Criterion) {
     for &n in &[100_usize, 500, 1_000, 5_000, 10_000] {

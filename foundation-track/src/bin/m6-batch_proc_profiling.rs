@@ -1,6 +1,6 @@
 use std::{hint::black_box, time::Instant};
 
-use foundation_track::module6::benchmarking::{build_test_data, process_batch};
+use foundation_track::module6::part1::benchmarking::{build_test_data, process_batch};
 
 fn main() {
     // Run enough iterations for perf to collect ~1000+ samples.

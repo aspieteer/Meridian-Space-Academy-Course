@@ -69,7 +69,7 @@ fn time_fn<F: Fn()>(f: F, iters: u32) -> Duration {
     start.elapsed() / iters
 }
 
-fn assemble_u128(high: u64, low: u32) -> u128 {
+pub fn assemble_u128(high: u64, low: u32) -> u128 {
     ((high as u128) << 32) | (low as u128)
 }
 

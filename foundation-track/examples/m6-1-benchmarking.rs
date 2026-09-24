@@ -1,4 +1,4 @@
-use foundation_track::module6::benchmarking::{build_test_data, processing};
+use foundation_track::module6::part1::benchmarking::{build_test_data, processing};
 
 fn main() {
     println!(
