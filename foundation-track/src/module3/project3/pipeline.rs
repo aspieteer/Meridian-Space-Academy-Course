@@ -68,7 +68,7 @@ pub async fn adding_source(system: Arc<TelemetrySystem>, ctrl_tx: mpsc::Sender<S
         let dice = rng.random_range(0..100);
         // SAFETY: We assure that the interval is a positive integer.
         // TODO: Can further tweak the parameter for more frequent source adding request.
-        let interval = i64::from(rng.random_range(100..200));
+        let interval = i64::from(rng.random_range(100..150));
         let kind = match dice {
             0..96 => SourceKind::LiveUplink,
             96..100 => SourceKind::ArchivedReplay,

@@ -7,6 +7,7 @@ use tokio::{
 
 // ===== broadcast example =====
 
+#[allow(dead_code)]
 async fn session_loop(mut rx: broadcast::Receiver<Vec<u8>>) {
     loop {
         match rx.recv().await {

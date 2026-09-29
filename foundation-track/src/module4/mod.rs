@@ -1,4 +1,4 @@
-pub mod connection_processing;
+pub mod part1;
+pub mod part2;
+pub mod part3;
 pub mod project4;
-pub mod radar_detection;
-pub mod reqwest_client;

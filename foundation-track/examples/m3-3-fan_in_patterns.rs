@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use foundation_track::module3::{
+use foundation_track::module3::part3::{
     router_tagged_frame::{RouterMsg, router_actor},
     tagged_frame::{live_uplink, replay_feed},
 };
@@ -65,14 +65,18 @@ async fn main() {
 
     while let Some(frame) = rx.recv().await {
         match frame.source() {
-            foundation_track::module3::tagged_frame::FeedKind::LiveUplink { satellite_id } => {
+            foundation_track::module3::part3::tagged_frame::FeedKind::LiveUplink {
+                satellite_id,
+            } => {
                 println!(
                     "live satellite {satellite_id} seq {}: {} bytes",
                     frame.sequence(),
                     frame.payload().len()
                 );
             }
-            foundation_track::module3::tagged_frame::FeedKind::ArchivedReplay { mission_id } => {
+            foundation_track::module3::part3::tagged_frame::FeedKind::ArchivedReplay {
+                mission_id,
+            } => {
                 println!(
                     "replay {mission_id:?} seq {}: {} bytes",
                     frame.sequence(),
@@ -111,7 +115,7 @@ async fn main() {
     tokio::time::sleep(Duration::from_millis(50)).await;
     let mut count = 0;
 
-    while let Ok(frame) = tokio::time::timeout(Duration::from_millis(20), out_rx.recv()).await {
+    while let Ok(frame) = tokio::time::timeout(Duration::from_millis(15), out_rx.recv()).await {
         if let Some(f) = frame {
             println!("satellite {}: {} bytes", f.source_id(), f.payload().len());
             count += 1;

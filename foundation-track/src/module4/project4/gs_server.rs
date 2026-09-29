@@ -186,7 +186,7 @@ async fn tle_handler(
         (&hyper::Method::GET, "/tle/0") => {
             let data =
                 "{\"norad_id\":0,\"name\":\"Artemis\",\"line1\":\"Hello\",\"line2\":\"Bye\"}";
-            tracing::info!(%method, %path, status = 200, "tle_handler: serving TLE record");
+            tracing::info!(%method, %path, status = 150, "tle_handler: serving TLE record");
             Ok(hyper::Response::builder()
                 .status(StatusCode::OK)
                 .body(Full::new(Bytes::from(data)))?)

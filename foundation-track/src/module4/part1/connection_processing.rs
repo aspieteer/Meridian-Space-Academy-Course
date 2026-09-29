@@ -66,12 +66,13 @@ pub(crate) async fn read_frame(stream: &mut TcpStream) -> anyhow::Result<Option<
 // NOTE:
 // Use TcpStream::split() (reference) when both read and write stay in one task.
 // Use TcpStream::into_split() (value) when they need to move to separate tasks.
+#[allow(dead_code)]
 pub(crate) async fn bidirectional_handler(stream: TcpStream) -> anyhow::Result<()> {
     // into_split: value split — each half can move to separate tasks.
     let (mut reader, mut writer) = stream.into_split();
 
     // Write task: sends periodic heartbeats.
-    let write_task = tokio::spawn(async move {
+    let _write_task = tokio::spawn(async move {
         loop {
             tokio::time::sleep(Duration::from_secs(30)).await;
             if writer.write_all(b"HEARTBEAT\n").await.is_err() {
@@ -104,6 +105,7 @@ pub(crate) async fn bidirectional_handler(stream: TcpStream) -> anyhow::Result<(
 // Always call flush() after writing a complete logical unit (a frame, a response).
 // If you return from the handler without flushing,
 // buffered data is silently dropped when the BufWriter drops.
+#[allow(dead_code)]
 pub(crate) async fn write_framed(stream: TcpStream, payload: &[u8]) -> anyhow::Result<()> {
     // BufWriter with 8KB internal buffer — flushes when full or on explicit flush().
     let mut writer = BufWriter::new(stream);

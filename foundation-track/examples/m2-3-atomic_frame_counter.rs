@@ -1,6 +1,6 @@
 use std::{sync::Arc, time::Duration};
 
-use foundation_track::module2::pipeline_metrics::PipelineMetrics;
+use foundation_track::module2::part3::pipeline_metrics::PipelineMetrics;
 
 fn main() {
     let metrics = PipelineMetrics::new();

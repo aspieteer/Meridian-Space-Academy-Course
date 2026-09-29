@@ -12,6 +12,7 @@ use tokio::{
     time::Duration,
 };
 
+#[allow(dead_code)]
 async fn session_with_shutdown(
     session: impl Future<Output = ()>,
     mut shutdown: oneshot::Receiver<()>,
@@ -32,7 +33,7 @@ async fn session_with_shutdown(
 //
 // Multi-channel drain with `else`: when a session task needs to drain
 // from multiple upstream channels until all are closed:
-
+#[allow(dead_code)]
 fn process_frame(frame: Vec<u8>, source: &str) {
     let s = String::from_utf8(frame);
     match s {
@@ -44,6 +45,7 @@ fn process_frame(frame: Vec<u8>, source: &str) {
     }
 }
 
+#[allow(dead_code)]
 async fn drain_uplinks(
     mut primary: mpsc::Receiver<Vec<u8>>,
     mut redundant: mpsc::Receiver<Vec<u8>>,
@@ -81,7 +83,7 @@ async fn catalog_refresh() -> Vec<u8> {
 
 #[tokio::main]
 async fn main() {
-    let (tx, mut rx) = mpsc::channel::<String>(8);
+    let (_tx, mut rx) = mpsc::channel::<String>(8);
 
     let refresher = catalog_refresh();
     let mut refresher = std::pin::pin!(refresher);

@@ -57,6 +57,12 @@ impl DbDropGuard {
     }
 }
 
+impl Default for DbDropGuard {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Drop for DbDropGuard {
     fn drop(&mut self) {
         self.db.shutdown_purge_task();

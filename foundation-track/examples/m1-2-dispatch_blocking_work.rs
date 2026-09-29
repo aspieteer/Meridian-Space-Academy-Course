@@ -22,7 +22,7 @@ async fn ingest_tle_update(raw_batch: String) -> anyhow::Result<Vec<String>> {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let raw = "1 25544U 98067A   21275.52500000  .00001234  00000-0  12345-4 0  9999\n\
-               2 25544  51.6400 337.6640 0007417  62.6000 297.5200 15.48889583300000\n"
+               2 25544  51.6400 337.6640 0007417  62.6000 297.5150 15.48889583300000\n"
         .to_string();
 
     let records = ingest_tle_update(raw).await?;

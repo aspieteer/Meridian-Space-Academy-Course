@@ -1,15 +1,9 @@
-use std::sync::atomic::AtomicU64;
-
 use foundation_track::module6::{
     part1::benchmarking::assemble_u128, part3::counting_alloc::CountingAllocator,
 };
 
 #[global_allocator]
-static ALLOCATOR: CountingAllocator = CountingAllocator {
-    alloc_count: AtomicU64::new(0),
-    dealloc_count: AtomicU64::new(0),
-    alloc_bytes: AtomicU64::new(0),
-};
+static ALLOCATOR: CountingAllocator = CountingAllocator::new();
 
 // --- Frame processor under test ---
 

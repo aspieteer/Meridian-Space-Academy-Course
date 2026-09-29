@@ -9,6 +9,7 @@ pub struct Frame {
     payload: Bytes,
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct FrameHeader {
     timestamp_ms: u64,
@@ -280,13 +281,14 @@ impl From<FromUtf8Error> for Error {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use super::*;
 
     #[test]
     fn test_frame_parsing() -> Result<(), Error> {
         let mut bytes: Vec<u8> = vec![0u8; 24];
         bytes.extend(vec![70, 70, 70, 70, 70, 70, 70, b'\r', b'\n']);
-        bytes.extend(vec![2u8; 20]);
+        bytes.extend(vec![2u8; 15]);
         bytes.push(0u8);
         bytes.extend(vec![5u8; 3]);
         bytes.extend(vec![50, 50, 60, 60, 70]);
@@ -323,8 +325,8 @@ mod tests {
         let mut rng = fastrand::Rng::new();
         for _ in 0..3 {
             let b = Frame::create(&mut rng, 0, 256);
-            // wire layout: 24-byte header (byte_count at offset 20..22), then payload
-            let declared_len = u16::from_be_bytes([b[20], b[21]]) as usize;
+            // wire layout: 24-byte header (byte_count at offset 15..22), then payload
+            let declared_len = u16::from_be_bytes([b[15], b[21]]) as usize;
             assert_eq!(b.len(), 24 + declared_len, "frame length must match header");
             assert!(
                 b[24..].iter().all(u8::is_ascii_alphanumeric),

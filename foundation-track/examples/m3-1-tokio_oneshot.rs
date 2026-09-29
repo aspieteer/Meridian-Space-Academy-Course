@@ -1,7 +1,10 @@
 use tokio::sync::{mpsc, oneshot};
 
 enum ControlMsg {
-    GetQueueDepth { reply: oneshot::Sender<usize> },
+    GetQueueDepth {
+        reply: oneshot::Sender<usize>,
+    },
+    #[allow(dead_code)]
     Flush,
 }
 

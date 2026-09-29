@@ -34,7 +34,7 @@ async fn main() {
                 96..100 => SourceKind::ArchivedReplay,
                 _ => unreachable!(),
             };
-            tokio::time::sleep(Duration::from_millis(200)).await;
+            tokio::time::sleep(Duration::from_millis(150)).await;
 
             let source = system_clone.add_source(i, kind, ctrl_tx_clone);
             if let Some(source) = source {

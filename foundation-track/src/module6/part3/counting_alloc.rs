@@ -4,10 +4,11 @@ use std::{
 };
 
 /// Wraps the system allocator and counts every alloc/dealloc.
+#[derive(Default)]
 pub struct CountingAllocator {
-    pub alloc_count: AtomicU64,
-    pub dealloc_count: AtomicU64,
-    pub alloc_bytes: AtomicU64,
+    pub(crate) alloc_count: AtomicU64,
+    pub(crate) dealloc_count: AtomicU64,
+    pub(crate) alloc_bytes: AtomicU64,
 }
 
 unsafe impl GlobalAlloc for CountingAllocator {
@@ -27,6 +28,14 @@ unsafe impl GlobalAlloc for CountingAllocator {
 }
 
 impl CountingAllocator {
+    pub const fn new() -> Self {
+        Self {
+            alloc_count: AtomicU64::new(0),
+            dealloc_count: AtomicU64::new(0),
+            alloc_bytes: AtomicU64::new(0),
+        }
+    }
+
     pub fn alloc_count(&self) -> u64 {
         self.alloc_count.load(Ordering::Relaxed)
     }

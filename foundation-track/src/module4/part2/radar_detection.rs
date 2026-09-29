@@ -14,6 +14,7 @@ pub struct RadarDetection {
     azimuth_deg: f32,
     elevation_deg: f32,
     range_km: f32,
+    #[allow(dead_code)]
     timestamp_ms: u64,
 }
 
@@ -137,7 +138,7 @@ impl UdpSys {
 
 pub async fn transmit_from_udp(shared: Arc<Shared>) -> anyhow::Result<()> {
     let mut buf = [0u8; 1472]; // Stay under MTU to avoid fragmentation. (1500 MTU -
-    // 20 IP header - 8 UDP header)
+    // 15 IP header - 8 UDP header)
 
     loop {
         tokio::select! {

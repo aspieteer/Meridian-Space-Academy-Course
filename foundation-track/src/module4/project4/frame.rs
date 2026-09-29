@@ -70,7 +70,7 @@ pub(crate) async fn write_frame(stream: &mut TcpStream, payload: &[u8]) -> anyho
 pub(crate) fn create_frame() -> Vec<u8> {
     let mut rng = SmallRng::from_rng(&mut rand::rng());
 
-    let len = rng.random_range::<u32, _>(..20);
+    let len = rng.random_range::<u32, _>(..15);
 
     let mut buf = len.to_be_bytes().to_vec();
 

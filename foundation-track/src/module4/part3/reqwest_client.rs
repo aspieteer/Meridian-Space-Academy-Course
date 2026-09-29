@@ -16,7 +16,7 @@ impl MissionApiClient {
     pub fn new(base_url: String, api_key: String) -> anyhow::Result<Self> {
         let client = Client::builder()
             .connect_timeout(Duration::from_secs(5))
-            .timeout(Duration::from_secs(20))
+            .timeout(Duration::from_secs(15))
             .pool_max_idle_per_host(4)
             .user_agent("meridian-control-plane/1.0")
             .build()
@@ -116,6 +116,7 @@ pub fn build_client() -> anyhow::Result<Client> {
 
 // ===== GET =====
 
+#[allow(dead_code)]
 #[derive(Clone, Debug, Deserialize)]
 pub struct TleRecord {
     norad_id: u32,

@@ -1,5 +1,5 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use foundation_track::module5::frame_batch::FrameBatchProcessor;
+use foundation_track::module5::part3::frame_batch::FrameBatchProcessor;
 
 fn frame_batch_cycle() -> usize {
     let mut processor = FrameBatchProcessor::new(1000, 1024);

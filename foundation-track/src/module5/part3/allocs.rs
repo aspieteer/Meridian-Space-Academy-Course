@@ -1,3 +1,4 @@
+#[cfg(feature = "bump")]
 use bumpalo::Bump;
 
 pub fn global_alloc(frames: usize, payload_size: usize) {
@@ -29,6 +30,7 @@ pub fn arena_alloc(frames: usize, payload_size: usize) {
     let _ = offset;
 }
 
+#[cfg(feature = "bump")]
 pub fn bump_arena_alloc(frames: usize, payload_size: usize) {
     assert!(payload_size.is_multiple_of(8));
 

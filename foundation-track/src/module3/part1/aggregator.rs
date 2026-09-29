@@ -7,7 +7,9 @@ const MAX_BUFFER: usize = 1000;
 #[derive(Debug)]
 pub struct TelemetryFrame {
     satellite_id: u32,
+    #[allow(dead_code)]
     sequence: u64,
+    #[allow(dead_code)]
     payload: Vec<u8>,
 }
 

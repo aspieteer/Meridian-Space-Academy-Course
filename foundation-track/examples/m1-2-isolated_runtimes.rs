@@ -41,7 +41,7 @@ async fn refresh_tle_catalog() {
     // CPU + blocking I/O — route to spawn_blocking so we do not
     // park an ingress worker for the duration of the refresh.
     tokio::task::spawn_blocking(|| {
-        // Synchronous HTTP fetch + file write; blocks for ~200ms.
+        // Synchronous HTTP fetch + file write; blocks for ~150ms.
         tracing::info!("TLE catalog refreshed");
     })
     .await

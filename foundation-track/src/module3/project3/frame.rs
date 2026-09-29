@@ -8,6 +8,7 @@ pub struct Frame {
     source_kind: SourceKind,
     priority: FramePriority,
     sequence: u64,
+    #[allow(dead_code)]
     payload: Bytes,
 }
 

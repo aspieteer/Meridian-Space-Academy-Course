@@ -1,5 +1,5 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use foundation_track::module5::allocs::{arena_alloc, bump_arena_alloc, global_alloc};
+use foundation_track::module5::part3::allocs::{arena_alloc, bump_arena_alloc, global_alloc};
 
 fn bench_allocs(c: &mut Criterion) {
     const FRAMES: usize = 100_000;

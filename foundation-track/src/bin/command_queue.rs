@@ -10,7 +10,7 @@ fn main() {
         .map(|i| {
             let q = Arc::clone(&queue);
             std::thread::spawn(move || {
-                for j in 0..20 {
+                for j in 0..15 {
                     let cmd_kind = match (i + j) % 5 {
                         0 => CommandKind::SafeMode,
                         1 => CommandKind::AbortPass,
@@ -59,7 +59,7 @@ fn main() {
             if q.is_shutsown() {
                 break;
             }
-            std::thread::sleep(Duration::from_millis(20));
+            std::thread::sleep(Duration::from_millis(15));
             println!(
                 "metrics: pushed={} dispatched={} safe_mode={}",
                 metrics.load_pushed(),

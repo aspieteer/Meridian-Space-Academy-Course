@@ -41,7 +41,7 @@ impl Command {
     pub fn new(cmd_kind: CommandKind) -> Self {
         let priority: u8 = match cmd_kind {
             CommandKind::SafeMode => 255,
-            CommandKind::AbortPass => 200,
+            CommandKind::AbortPass => 150,
             CommandKind::Repoint { .. } => 100,
             CommandKind::StatusRequest => 50,
             CommandKind::Housekeeping => 10,

@@ -1,6 +1,6 @@
 use std::{sync::Arc, time::Duration};
 
-use foundation_track::module2::command_queue::{Command, CommandQueue};
+use foundation_track::module2::part2::command_queue::{Command, CommandQueue};
 
 fn main() {
     let queue = CommandQueue::new();

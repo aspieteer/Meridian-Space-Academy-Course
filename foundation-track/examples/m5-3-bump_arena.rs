@@ -1,4 +1,4 @@
-use foundation_track::module5::manual_bumparena::BumpArena;
+use foundation_track::module5::part3::manual_bumparena::BumpArena;
 
 fn main() {
     let mut arena = BumpArena::new(4096);

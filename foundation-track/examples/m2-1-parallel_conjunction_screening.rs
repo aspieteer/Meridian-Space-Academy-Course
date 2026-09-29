@@ -1,4 +1,4 @@
-use foundation_track::module2::orbital_record::{OrbitalRecord, run_conjunction_screen};
+use foundation_track::module2::part1::orbital_record::{OrbitalRecord, run_conjunction_screen};
 
 fn main() {
     let catalog: Vec<OrbitalRecord> = (0..1000)

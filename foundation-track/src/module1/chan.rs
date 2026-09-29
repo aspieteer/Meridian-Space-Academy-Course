@@ -36,7 +36,8 @@ impl<'a, T> ReusableBoxFuture<'a, T> {
 
 // ===== Helper =====
 
-fn reuse_pin_box<T, U, F, O>(boxed: Pin<Box<T>>, new_value: U, callback: F) -> Result<O, U>
+#[allow(dead_code)]
+fn reuse_pin_box<T, U, F, O>(boxed: Pin<Box<T>>, new_value: U, _callback: F) -> Result<O, U>
 where
     T: ?Sized,
     F: FnOnce(Box<U>) -> O,

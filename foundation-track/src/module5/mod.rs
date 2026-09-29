@@ -1,4 +1,4 @@
-pub mod allocs;
-pub mod frame_batch;
-pub mod manual_bumparena;
+pub mod part1;
+pub mod part2;
+pub mod part3;
 pub mod project5;

@@ -9,5 +9,3 @@ pub mod shutdown;
 pub const PORT: usize = 6789;
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
-
-type Result<T> = std::result::Result<T, Error>;

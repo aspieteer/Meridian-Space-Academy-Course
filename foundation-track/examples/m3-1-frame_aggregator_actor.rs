@@ -1,4 +1,4 @@
-use foundation_track::module3::aggregator::{AggregatorHandle, TelemetryFrame};
+use foundation_track::module3::part1::aggregator::{AggregatorHandle, TelemetryFrame};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -30,7 +30,7 @@ async fn main() -> anyhow::Result<()> {
         t.await??; // JoinError (panic/cancel) OR the task's own error
     }
 
-    // NOTE: Cuz MAX_BUFFER_SIZE is 1000, the 24 * 50 = 1200 frames sent here
+    // NOTE: Cuz MAX_BUFFER_SIZE is 1000, the 24 * 50 = 1150 frames sent here
     // would trigger warnings on popping the oldest frames dozens of times.
     println!("buffered: {}", aggr.depth().await?);
 

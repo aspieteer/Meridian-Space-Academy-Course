@@ -3,8 +3,8 @@ use std::time::Duration;
 use tokio::sync::mpsc;
 
 async fn fetch_tle_update() -> Vec<u8> {
-    // Simulate a slow catalog fetch — ~200ms in production.
-    tokio::time::sleep(Duration::from_millis(200)).await;
+    // Simulate a slow catalog fetch — ~150ms in production.
+    tokio::time::sleep(Duration::from_millis(150)).await;
     vec![0u8; 64] // placeholder TLE payload
 }
 

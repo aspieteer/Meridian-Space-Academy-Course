@@ -1,6 +1,6 @@
 use std::sync::{Arc, Mutex};
 
-use foundation_track::module2::session_table::SessionTable;
+use foundation_track::module2::part2::session_table::SessionTable;
 
 fn accumu_counter_as_dumb(count: usize) {
     assert!(count.is_multiple_of(4), "count should be multiples of 4.");
