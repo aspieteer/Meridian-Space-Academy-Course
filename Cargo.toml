@@ -1,7 +1,7 @@
 [workspace]
 resolver = "3"
 
-members = ["foundation-track"]
+members = ["foundation-track", "database-track"]
 
 [workspace.package]
 name = "meridian-space"
@@ -14,6 +14,7 @@ homepage = "https://rustycloud.org/index.html"
 anyhow = "1"
 bumpalo = "3.20"
 bytes = "1"
+crc32fast = "1.5"
 dhat = "0.3"
 fastrand = "2.5"
 http-body-util = "0.1"
