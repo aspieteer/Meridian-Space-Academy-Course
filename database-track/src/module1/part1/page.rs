@@ -4,9 +4,7 @@ use std::{
     path::Path,
 };
 
-const PAGE_SIZE: usize = 4096;
-const MAGIC: [u8; 4] = [0x4F, 0x4F, 0x52, 0x31]; // "OOR1"
-const HEADER_SIZE: usize = 17; // PageHeader size = 4 + 4 + 1 + 2 + 2 + 4 = 17
+use crate::module1::config::{MAGIC, PAGE_HEADER_SIZE};
 
 /// Page types in the Orbital Object Registry.
 #[repr(u8)]
@@ -38,7 +36,7 @@ impl PageHeader {
             page_type,
             record_count: 0,
             // Free space starts immediately after the header
-            free_space_offset: HEADER_SIZE as u16,
+            free_space_offset: PAGE_HEADER_SIZE as u16,
             checksum: 0,
         }
     }
@@ -53,16 +51,16 @@ impl PageHeader {
     }
 
     pub fn deserialize(buf: &[u8]) -> io::Result<Self> {
-        if buf[0..4] != MAGIC {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "invalid page magic bytes - not an OOR page",
-            ));
-        }
         if buf.len() < 17 {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidData,
                 "invalid page bytes - not enough size even for page header",
+            ));
+        }
+        if buf[0..4] != MAGIC {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "invalid page magic bytes - not an OOR page",
             ));
         }
 
@@ -92,6 +90,7 @@ impl PageHeader {
 // ===== PageFile =====
 
 /// Low-level page I/O against the database file.
+#[derive(Debug)]
 pub struct PageFile {
     file: File,
     page_size: usize,
@@ -102,10 +101,24 @@ impl PageFile {
         let file = File::options()
             .read(true)
             .write(true)
+            .truncate(false)
             .create(true)
-            .truncate(true)
             .open(path)?;
         Ok(Self { file, page_size })
+    }
+
+    /// Return the number of complete pages currently stored in the file.
+    pub fn page_count(&self) -> io::Result<u32> {
+        let file_len = self.file.metadata()?.len();
+        if file_len % self.page_size as u64 != 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "database file length is not aligned to the configured page size",
+            ));
+        }
+
+        u32::try_from(file_len / self.page_size as u64)
+            .map_err(|_| io::Error::other("database file contains too many pages"))
     }
 
     /// Read a page from disk into the provided buffer,
@@ -174,10 +187,10 @@ impl PageFile {
 /// CRC32 checksum of the page body (everything after the checksum field).
 /// We zero the checksum field before computing so the checksum is
 /// deterministic regardless of the previous checksum value.
-fn compute_checksum(page_buf: &[u8]) -> u32 {
+pub(crate) fn compute_checksum(page_buf: &[u8]) -> u32 {
     // Checksum covers bytes 17..PAGE_SIZE (the body).
     // The header's checksum field (bytes 13..17) is excluded from the
     // computation — it stores the result.
-    let body = &page_buf[HEADER_SIZE..];
+    let body = &page_buf[PAGE_HEADER_SIZE..];
     crc32fast::hash(body)
 }
