@@ -1,6 +1,5 @@
 use crate::module1::{
-    PAGE_HEADER_SIZE, PAGE_SIZE,
-    config::{SLOT_SIZE, TOMBSTONE},
+    PAGE_HEADER_SIZE, PAGE_SIZE, SLOT_SIZE, TOMBSTONE,
     part1::page::{PageHeader, PageType},
 };
 
