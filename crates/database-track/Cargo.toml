@@ -1,0 +1,14 @@
+[package]
+name = "database-track"
+description = """
+This is the module that establishes the foundational layer of the Orbital Object Registry storage engine.
+Before you can index, query, or recover data, you need a reliable on-disk format
+and an efficient way to move pages between disk and memory. Every decision made here —
+page size, record layout, eviction policy — propagates upward through the entire engine.
+"""
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+
+[dependencies]
+crc32fast.workspace = true

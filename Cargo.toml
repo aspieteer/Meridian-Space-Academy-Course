@@ -1,7 +1,7 @@
 [workspace]
 resolver = "3"
 
-members = ["foundation-track", "database-track"]
+members = ["crates/*"]
 
 [workspace.package]
 name = "meridian-space"
@@ -33,3 +33,7 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 
 criterion = "0.8"
+
+[workspace.lints.clippy]
+dbg_macro = "deny"
+todo = "deny"

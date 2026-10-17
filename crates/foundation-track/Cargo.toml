@@ -1,0 +1,185 @@
+[package]
+name = "foundation-track"
+description = """
+The foundation of async programming in rust,
+including 4 modules which span from fundamentals, concurrency primitives,
+message passing patterns, network programming, data-oriented programming
+to performace & profiling.
+"""
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+bumpalo = { workspace = true, optional = true }
+bytes.workspace = true
+dhat = { workspace = true, optional = true }
+fastrand.workspace = true
+http-body-util.workspace = true
+hyper = { workspace = true, features = ["server"] }
+hyper-util.workspace = true
+jiff.workspace = true
+num_cpus.workspace = true
+pin-project-lite.workspace = true
+rand.workspace = true
+rayon = { workspace = true, optional = true }
+reqwest = { workspace = true, features = ["json", "query"] }
+serde = { workspace = true, features = ["derive"] }
+tokio = { workspace = true, features = ["full"] }
+tokio-util = { workspace = true, features = ["rt"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+criterion.workspace = true
+
+[features]
+default = []
+bump = ["dep:bumpalo"]
+rayon = ["dep:rayon"]
+dhat-heap = ["dep:dhat"]
+
+[profile.release]
+debug = true # Include debug symbols (DWARF info).
+
+
+# ===== examples =====
+
+[[examples]]
+name = "tokio-pin"
+path = "examples/m1-1-tokio_pin.rs"
+
+[[examples]]
+name = "telemetry-frame-validator"
+path = "examples/m1-1-telemetry_frame_validator.rs"
+
+[[examples]]
+name = "tokio-join"
+path = "examples/m1-1-tokio_join.rs"
+
+[[examples]]
+name = "runtime-builder"
+path = "examples/m1-2-runtime_builder.rs"
+
+[[examples]]
+name = "isolated-runtimes"
+path = "examples/m1-2-isolated_runtimes.rs"
+
+[[examples]]
+name = "dispatch-blocking-work"
+path = "examples/m1-2-dispatch_blocking_work.rs"
+
+[[examples]]
+name = "cancellation-token"
+path = "examples/m1-3-cancellation_token.rs"
+
+[[examples]]
+name = "task-tracker"
+path = "examples/m1-3-task_tracker.rs"
+
+[[examples]]
+name = "tokio-select"
+path = "examples/m1-3-tokio_select.rs"
+
+[[examples]]
+name = "manage-satellite-pass"
+path = "examples/m1-3-manage_satellite_pass.rs"
+
+[[examples]]
+name = "thread-scope"
+path = "examples/m2-1-thread_scope.rs"
+
+[[examples]]
+name = "async-and-blocking"
+path = "examples/m2-1-async_and_blocking.rs"
+
+[[examples]]
+name = "parallel-conjunction-screening"
+path = "examples/m2-1-parallel_conjunction_screening.rs"
+
+[[examples]]
+name = "exclusive-access"
+path = "examples/m2-2-exclusive_access.rs"
+
+[[examples]]
+name = "priority-command-queue"
+path = "examples/m2-2-priority_command_queue.rs"
+
+[[examples]]
+name = "atomic-frame-counter"
+path = "examples/m2-3-atomic_frame_counter.rs"
+
+[[examples]]
+name = "tokio-mpsc"
+path = "examples/m3-1-tokio_mpsc.rs"
+
+[[examples]]
+name = "tokio-oneshot"
+path = "examples/m3-1-tokio_oneshot.rs"
+
+[[examples]]
+name = "frame-aggregator-actor"
+path = "examples/m3-1-frame_aggregator_actor.rs"
+
+[[examples]]
+name = "broadcast-and-watch-channel"
+path = "examples/m3-2-broadcast_and_watch_channel.rs"
+
+[[examples]]
+name = "catalog-update-broadcaster"
+path = "examples/m3-2-catalog_update_broadcaster.rs"
+
+[[examples]]
+name = "fan-in-patterns"
+path = "examples/m3-3-fan_in_patterns.rs"
+
+[[examples]]
+name = "tcp-server"
+path = "examples/m4-1-tcp_server.rs"
+
+[[examples]]
+name = "radar-info-sender"
+path = "examples/m4-2-radar_info_sender.rs"
+
+[[examples]]
+name = "radar-sensor-receiver"
+path = "examples/m4-2-radar_sensor_receiver.rs"
+
+[[examples]]
+name = "udp-split"
+path = "examples/m4-2-udp_split.rs"
+
+[[examples]]
+name = "mission-client"
+path = "examples/m4-3-mission_client.rs"
+
+[[examples]]
+name = "data-layouts"
+path = "examples/m5-1-data_layouts.rs"
+
+[[examples]]
+name = "soa-vs-aos"
+path = "examples/m5-2-soa_vs_aos.rs"
+
+[[examples]]
+name = "bump-arena"
+path = "examples/m5-3-bump_arena.rs"
+
+[[examples]]
+name = "benchmarking"
+path = "examples/m6-1-benchmarking.rs"
+
+# ===== bench =====
+
+[[bench]]
+name = "frame_batch"
+harness = false
+
+[[bench]]
+name = "bench_allocs"
+harness = false
+
+[[bench]]
+name = "bench_processing"
+harness = false
