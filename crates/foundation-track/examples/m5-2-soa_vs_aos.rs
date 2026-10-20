@@ -1,4 +1,3 @@
-#[cfg(feature = "rayon")]
 use rayon::iter::{
     IndexedParallelIterator, IntoParallelIterator, IntoParallelRefIterator, ParallelIterator,
 };

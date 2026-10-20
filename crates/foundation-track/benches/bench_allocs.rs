@@ -1,5 +1,7 @@
 use criterion::{Criterion, criterion_group, criterion_main};
-use foundation_track::module5::part3::allocs::{arena_alloc, bump_arena_alloc, global_alloc};
+#[cfg(feature = "bump")]
+use foundation_track::module5::part3::allocs::bump_arena_alloc;
+use foundation_track::module5::part3::allocs::{arena_alloc, global_alloc};
 
 fn bench_allocs(c: &mut Criterion) {
     const FRAMES: usize = 100_000;
@@ -13,6 +15,7 @@ fn bench_allocs(c: &mut Criterion) {
     group.bench_function("Manual Arena Allocation", |b| {
         b.iter(|| arena_alloc(FRAMES, PAYLOAD_SIZE))
     });
+    #[cfg(feature = "bump")]
     group.bench_function("Bumpalo Arena Allocation", |b| {
         b.iter(|| bump_arena_alloc(FRAMES, PAYLOAD_SIZE))
     });
