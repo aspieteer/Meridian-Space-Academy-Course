@@ -4,4 +4,6 @@ pub mod part3;
 pub mod project1;
 
 mod config;
-pub(crate) use config::{MAGIC, PAGE_HEADER_SIZE, PAGE_SIZE, SLOT_SIZE, TOMBSTONE};
+pub(crate) use config::{
+    MAGIC, MAX_USAGE_COUNT, PAGE_HEADER_SIZE, PAGE_SIZE, SLOT_SIZE, TOMBSTONE,
+};

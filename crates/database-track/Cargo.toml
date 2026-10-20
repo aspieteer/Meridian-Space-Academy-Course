@@ -12,3 +12,12 @@ homepage.workspace = true
 
 [dependencies]
 crc32fast.workspace = true
+
+[dev-dependencies]
+criterion.workspace = true
+rand.workspace = true
+rand_distr.workspace = true
+
+[[bench]]
+name = "buffer_pool_compare"
+harness = false
