@@ -6,7 +6,7 @@ use std::{
     },
 };
 
-use super::{PageId, PageStore, error::BufferPoolError};
+use super::{PageId, PageStore, error::BufferPoolError, stats::BufferPoolStats};
 use crate::module1::{MAX_USAGE_COUNT, PAGE_SIZE};
 
 pub struct BufferPool<S> {
@@ -23,26 +23,6 @@ struct BufferPoolInner {
     page_table: HashMap<PageId, usize>,
     clock_hand: usize,
     stats: BufferPoolStats,
-}
-
-/// Cumulative counters for completed fetches and CLOCK replacement work.
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
-pub struct BufferPoolStats {
-    pub hits: u64,
-    pub misses: u64,
-    pub evictions: u64,
-    pub clock_second_chances: u64,
-}
-
-impl BufferPoolStats {
-    pub fn hit_rate(&self) -> f64 {
-        let fetches = self.hits + self.misses;
-        if fetches == 0 {
-            0.0
-        } else {
-            self.hits as f64 / fetches as f64
-        }
-    }
 }
 
 /// The content inside Frame is synonymous with Page,

@@ -6,7 +6,11 @@ use std::{
     },
 };
 
-use super::{PageId, PageStore, error::BufferPoolError};
+use super::{
+    PageId, PageStore,
+    error::BufferPoolError,
+    stats::{BufferPoolAtomStats, BufferPoolStats},
+};
 use crate::module1::{MAX_USAGE_COUNT, PAGE_SIZE};
 
 type FrameIdx = usize;
@@ -24,6 +28,8 @@ struct BufferPoolV2Shared<S> {
     page_table: RwLock<HashMap<PageId, FrameIdx>>,
 
     clock_hand: AtomicUsize,
+
+    stats: BufferPoolAtomStats,
 }
 
 struct Frame {
@@ -60,6 +66,10 @@ impl<S: PageStore> BufferPoolV2<S> {
         Self {
             shared: Arc::new(BufferPoolV2Shared::new(capacity, store)),
         }
+    }
+
+    pub fn stats(&self) -> BufferPoolStats {
+        self.shared.stats.snapshot()
     }
 
     pub fn fetch_page(
@@ -140,10 +150,16 @@ impl<S: PageStore> BufferPoolV2<S> {
 
         *victim_state = FrameState::Valid(page_id.clone());
 
+        let evicted = old_page_id.is_some();
         if let Some(old_id) = old_page_id {
             table_write_lock.remove(&old_id);
         }
         table_write_lock.insert(page_id.clone(), victim_index);
+
+        self.shared.stats.misses.fetch_add(1, Ordering::Relaxed);
+        if evicted {
+            self.shared.stats.evictions.fetch_add(1, Ordering::Relaxed);
+        }
 
         drop(victim_state);
 
@@ -159,6 +175,8 @@ impl<S: PageStore> BufferPoolV2<S> {
         let frame = Arc::clone(&self.shared.frames[index]);
         frame.pin_count.fetch_add(1, Ordering::AcqRel);
         self.record_access(&frame, mode);
+
+        self.shared.stats.hits.fetch_add(1, Ordering::Relaxed);
 
         PageGuard { page_id, frame }
     }
@@ -216,6 +234,10 @@ impl<S: PageStore> BufferPoolV2<S> {
                 }
 
                 frame.usage_count.fetch_sub(1, Ordering::AcqRel);
+                self.shared
+                    .stats
+                    .clock_second_chances
+                    .fetch_add(1, Ordering::Relaxed);
                 // If usage > 0, decrement the pin_count to give the clock scan a "second" chance.
                 frame.pin_count.fetch_sub(1, Ordering::AcqRel);
             }
@@ -285,6 +307,7 @@ impl<S: PageStore> BufferPoolV2Shared<S> {
             frames,
             page_table: RwLock::new(HashMap::with_capacity(capacity)),
             clock_hand: AtomicUsize::new(0),
+            stats: BufferPoolAtomStats::default(),
         }
     }
 }

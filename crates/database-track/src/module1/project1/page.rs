@@ -138,6 +138,40 @@ impl Page {
         Some(slot_id)
     }
 
+    pub fn insert_compacting(&mut self, record: &[u8]) -> Option<u16> {
+        if let Some(slot_id) = self.insert(record) {
+            return Some(slot_id);
+        }
+        if record.len() > u16::MAX as usize {
+            return None;
+        }
+
+        let count = self.record_count();
+        let reused_slot = (0..count).any(|i| self.read_slot(i).0 == TOMBSTONE);
+        let needed = record.len() + if reused_slot { 0 } else { SLOT_SIZE };
+
+        let live_bytes = (0..count)
+            .map(|slot_id| {
+                let (offset, length) = self.read_slot(slot_id);
+                if offset == TOMBSTONE {
+                    0
+                } else {
+                    length as usize
+                }
+            })
+            .sum();
+
+        let records_bytes = PAGE_SIZE - self.record_region_offset() as usize;
+        let reclaimable = records_bytes.saturating_sub(live_bytes);
+
+        if self.free_space() + reclaimable < needed {
+            return None; // Compaction cannot make enough room.
+        }
+
+        self.compact();
+        self.insert(record)
+    }
+
     /// Look up a record by slot ID. Returns None if the slot is
     /// tombstoned or out of range.
     pub fn get(&self, slot_id: u16) -> Option<&[u8]> {

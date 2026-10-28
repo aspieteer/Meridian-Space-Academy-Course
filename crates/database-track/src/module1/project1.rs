@@ -5,10 +5,12 @@ use std::io;
 
 pub mod buffer_pool;
 pub mod buffer_pool_v2;
+pub mod buffer_pool_v3;
 pub mod disk_manager;
 pub mod error;
 pub mod page;
 pub mod relation_file;
+pub mod stats;
 pub mod tle;
 
 // PageNo alias
